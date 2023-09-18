@@ -9,9 +9,9 @@ use Src\Models\User;
 
 class Product extends DBModel 
 {
-    public $productInputs = [];
-    public $productOutputs = [];
-    public $user;
+    public ?array $productInputs = null;
+    public ?array $productOutputs = null;
+    public ?User $user = null;
 
     public static function tableName(): string 
     {
@@ -25,7 +25,10 @@ class Product extends DBModel
 
     public static function attributes(): array 
     {
-        return ['usu_id', 'desc_short'];
+        return [
+            'usu_id', 
+            'desc_short'
+        ];
     }
 
     public function rules(): array 
@@ -39,11 +42,6 @@ class Product extends DBModel
                 [self::RULE_MAX, 'max' => 300, 'message' => sprintf(_('A descrição deve conter no máximo %s caractéres!'), 300)]
             ]
         ];
-    }
-
-    public function destroy(): bool 
-    {
-        return parent::destroy();
     }
 
     public function productInputs(array $filters = [], string $columns = '*'): ?array 
@@ -66,16 +64,40 @@ class Product extends DBModel
 
     public static function withProductInputs(array $objects, array $filters = [], string $columns = '*'): array
     {
-        return self::withHasMany($objects, ProductInput::class, 'pro_id', 'productInput', 'id', $filters, $columns);
+        return self::withHasMany(
+            $objects, 
+            ProductInput::class, 
+            'pro_id', 
+            'productInput', 
+            'id', 
+            $filters, 
+            $columns
+        );
     }
 
     public static function withProductOutputs(array $objects, array $filters = [], string $columns = '*'): array
     {
-        return self::withHasMany($objects, ProductOutput::class, 'pro_id', 'productOutput', 'id', $filters, $columns);
+        return self::withHasMany(
+            $objects, 
+            ProductOutput::class, 
+            'pro_id', 
+            'productOutput', 
+            'id', 
+            $filters, 
+            $columns
+        );
     }
 
     public static function withUser(array $objects, array $filters = [], string $columns = '*'): array
     {
-        return self::withBelongsTo($objects, User::class, 'usu_id', 'user', 'id', $filters, $columns);
+        return self::withBelongsTo(
+            $objects, 
+            User::class, 
+            'usu_id', 
+            'user', 
+            'id', 
+            $filters, 
+            $columns
+        );
     }
 }

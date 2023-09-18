@@ -22,7 +22,7 @@
     </div>
 
     <div class="card-body">
-        
+        <div class="alert alert-info"><?= _('Estamos preparando...') ?></div>
     </div>
 </div>
 

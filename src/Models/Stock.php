@@ -8,7 +8,7 @@ use Src\Models\ProductInput;
 
 class Stock extends DBModel 
 {
-    public $product;
+    public ?Product $product = null;
 
     public static function tableName(): string 
     {
@@ -22,7 +22,11 @@ class Stock extends DBModel
 
     public static function attributes(): array 
     {
-        return ['pro_id', 'boxes', 'units'];
+        return [
+            'pro_id', 
+            'boxes', 
+            'units'
+        ];
     }
 
     public function rules(): array 
@@ -40,11 +44,6 @@ class Stock extends DBModel
         ];
     }
 
-    public function destroy(): bool 
-    {
-        return parent::destroy();
-    }
-
     public function product(string $columns = '*'): ?Product 
     {
         $this->product = $this->belongsTo(Product::class, 'pro_id', 'id', $columns)->fetch(false);
@@ -53,7 +52,15 @@ class Stock extends DBModel
 
     public static function withProduct(array $objects, array $filters = [], string $columns = '*'): array
     {
-        return self::withBelongsTo($objects, Product::class, 'pro_id', 'product', 'id', $filters, $columns);
+        return self::withBelongsTo(
+            $objects, 
+            Product::class, 
+            'pro_id', 
+            'product', 
+            'id', 
+            $filters, 
+            $columns
+        );
     }
 
     public static function getByProductId(int $productId, string $columns = '*'): ?self 

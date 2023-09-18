@@ -7,7 +7,7 @@ use Src\Models\User;
 
 class Collaborator extends DBModel 
 {
-    public $user;
+    public ?User $user = null;
     
     public static function tableName(): string 
     {
@@ -21,7 +21,10 @@ class Collaborator extends DBModel
 
     public static function attributes(): array 
     {
-        return ['usu_id', 'name'];
+        return [
+            'usu_id', 
+            'name'
+        ];
     }
 
     public function rules(): array 
@@ -54,7 +57,15 @@ class Collaborator extends DBModel
 
     public static function withUser(array $objects, array $filters = [], string $columns = '*'): array
     {
-        return self::withBelongsTo($objects, User::class, 'utip_id', 'user', 'id', $filters, $columns);
+        return self::withBelongsTo(
+            $objects, 
+            User::class, 
+            'utip_id', 
+            'user', 
+            'id', 
+            $filters, 
+            $columns
+        );
     }
 
     public static function getByUserId(string $userId, string $columns = '*'): ?self 

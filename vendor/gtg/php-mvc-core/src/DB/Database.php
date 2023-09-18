@@ -4,7 +4,10 @@ namespace GTG\MVC\DB;
 
 use CoffeeCode\DataLayer\Connect;
 use GTG\MVC\Application;
+use GTG\MVC\DB\Schema\Event;
+use GTG\MVC\DB\Schema\Procedure;
 use GTG\MVC\DB\Schema\Table;
+use GTG\MVC\DB\Schema\Trigger;
 use PDO;
 use PDOStatement;
 
@@ -27,7 +30,7 @@ class Database
         return $pdo->exec($sql);
     }
 
-    public function applyMigrations(): void 
+    public function applyMigrations(?int $number = null): void 
     {
         $this->createMigrationsTable();
         $appliedMigrations = $this->getAppliedMigrations();
@@ -37,7 +40,7 @@ class Database
             fn($m) => pathinfo($m, PATHINFO_FILENAME), 
             array_filter(scandir(Application::$ROOT_DIR . '/' . $this->migrations['path']), fn($m) => $m !== '.' && $m !== '..')
         );
-        $toApplyMigrations = array_diff($files, $appliedMigrations);
+        $toApplyMigrations = array_diff($files, array_map(fn ($o) => $o->migration, $appliedMigrations));
         foreach($toApplyMigrations as $migration) {
             $className = $this->migrations['namespace'] . "\\{$migration}";
             $instance = new $className();
@@ -45,6 +48,9 @@ class Database
             $instance->up();
             $this->log("Migration {$migration} applied!");
             $newMigrations[] = $migration;
+            if($number && count($newMigrations) >= $number) {
+                break;
+            }
         }
 
         if(!empty($newMigrations)) {
@@ -53,7 +59,7 @@ class Database
         $this->log('All migrations were applied!');
     }
 
-    public function reverseMigrations(): void 
+    public function reverseMigrations(?int $number = null): void 
     {
         $this->createMigrationsTable();
         $appliedMigrations = $this->getAppliedMigrations();
@@ -64,16 +70,23 @@ class Database
         );
         $toReverseMigrations = array_reverse($appliedMigrations);
         foreach($toReverseMigrations as $migration) {
-            $className = $this->migrations['namespace'] . "\\{$migration}";
+            $className = $this->migrations['namespace'] . "\\{$migration->migration}";
             $instance = new $className();
-            $this->log("Reversing migration {$migration}...");
+            $this->log("Reversing migration {$migration->migration}...");
             $instance->down();
-            $this->log("Migration {$migration} reversed!");
-            $newMigrations[] = $migration;
+            $this->log("Migration {$migration->migration} reversed!");
+            $newMigrationIds[] = $migration->id;
+            if($number && count($newMigrationIds) >= $number) {
+                break;
+            }
         }
 
-        if(!empty($newMigrations)) {
-            $this->deleteMigrations();
+        if(!empty($newMigrationIds)) {
+            if($number) {
+                $this->deleteMigrations($newMigrationIds);
+            } else {
+                $this->deleteMigrations();
+            }
         }
         $this->log('All migrations were reversed!');
     }
@@ -91,9 +104,9 @@ class Database
 
     public function getAppliedMigrations(): array 
     {
-        $statement = $this->prepare("SELECT migration FROM migrations");
+        $statement = $this->prepare("SELECT id, migration FROM migrations");
         $statement->execute();
-        return $statement->fetchAll(PDO::FETCH_COLUMN);
+        return $statement->fetchAll();
     }
 
     public function saveMigrations(array $migrations): void 
@@ -103,9 +116,13 @@ class Database
         $statement->execute();
     }
 
-    public function deleteMigrations(): void 
+    public function deleteMigrations(?array $migrationIds = null): void 
     {
-        $statement = $this->prepare("DELETE FROM migrations WHERE id >= 1");
+        if($migrationIds) {
+            $statement = $this->prepare("DELETE FROM migrations WHERE id IN (" . implode(',', $migrationIds) . ")");
+        } else {
+            $statement = $this->prepare("DELETE FROM migrations WHERE id >= 1");
+        }
         $statement->execute();
     }
 
@@ -154,6 +171,72 @@ class Database
         $table = new Table($tableName);
         $table->dropIfExists();
         return $this->exec($table->build());
+    }
+
+    public function createProcedure(string $procedureName, callable $callback): int 
+    {
+        $procedure = new Procedure($procedureName);
+        $procedure->create();
+        $callback($procedure);
+        return $this->exec($procedure->build());
+    }
+
+    public function dropProcedure(string $procedureName): int 
+    {
+        $procedure = new Procedure($procedureName);
+        $procedure->drop();
+        return $this->exec($procedure->build());
+    }
+
+    public function dropProcedureIfExists(string $procedureName): int 
+    {
+        $procedure = new Procedure($procedureName);
+        $procedure->dropIfExists();
+        return $this->exec($procedure->build());
+    }
+
+    public function createEvent(string $eventName, callable $callback): int 
+    {
+        $event = new Event($eventName);
+        $event->create();
+        $callback($event);
+        return $this->exec($event->build());
+    }
+
+    public function dropEvent(string $eventName): int 
+    {
+        $event = new Event($eventName);
+        $event->drop();
+        return $this->exec($event->build());
+    }
+
+    public function dropEventIfExists(string $eventName): int 
+    {
+        $event = new Event($eventName);
+        $event->dropIfExists();
+        return $this->exec($event->build());
+    }
+
+    public function createTrigger(string $triggerName, callable $callback): int 
+    {
+        $trigger = new Trigger($triggerName);
+        $trigger->create();
+        $callback($trigger);
+        return $this->exec($trigger->build());
+    }
+
+    public function dropTrigger(string $triggerName): int 
+    {
+        $trigger = new Trigger($triggerName);
+        $trigger->drop();
+        return $this->exec($trigger->build());
+    }
+
+    public function dropTriggerIfExists(string $triggerName): int 
+    {
+        $trigger = new Trigger($triggerName);
+        $trigger->dropIfExists();
+        return $this->exec($trigger->build());
     }
 
     public function prepare(string $sql): PDOStatement|false

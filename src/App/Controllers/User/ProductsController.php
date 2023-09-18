@@ -5,6 +5,7 @@ namespace Src\App\Controllers\User;
 use GTG\MVC\Components\ExcelGenerator;
 use Src\App\Controllers\User\TemplateController;
 use Src\Models\Product;
+use Src\Utils\ErrorMessages;
 
 class ProductsController extends TemplateController 
 {
@@ -34,8 +35,7 @@ class ProductsController extends TemplateController
     {
         $dbProduct = new Product();
         if(!$dbProduct->loadData(['usu_id' => $this->session->getAuth()->id] + $data)->save()) {
-            $this->setMessage('error', _('Erros de validação! Verifique os campos.'))
-                ->setErrors($dbProduct->getFirstErrors())->APIResponse([], 422);
+            $this->setMessage('error', ErrorMessages::form())->setErrors($dbProduct->getFirstErrors())->APIResponse([], 422);
             return;
         }
 
@@ -50,8 +50,7 @@ class ProductsController extends TemplateController
             $this->setMessage('error', _('Nenhum produto foi encontrado!'))->APIResponse([], 404);
             return;
         } elseif(!$dbProduct->loadData($data)->save()) {
-            $this->setMessage('error', _('Erros de validação! Verifique os campos.'))
-                ->setErrors($dbProduct->getFirstErrors())->APIResponse([], 422);
+            $this->setMessage('error', ErrorMessages::form())->setErrors($dbProduct->getFirstErrors())->APIResponse([], 422);
             return;
         }
 
@@ -170,9 +169,9 @@ class ProductsController extends TemplateController
             }
         }
 
-        $excel = new ExcelGenerator($excelData, _('lista-de-produtos'));
+        $excel = new ExcelGenerator($excelData, _('Lista de Produtos'));
         if(!$excel->render()) {
-            $this->session->setFlash('error', _('Lamentamos, mas não foi possível gerar o excel!'));
+            $this->session->setFlash('error', ErrorMessages::excel());
             $this->redirect('user.products.index');
         }
 

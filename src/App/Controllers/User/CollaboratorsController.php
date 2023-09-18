@@ -5,6 +5,7 @@ namespace Src\App\Controllers\User;
 use GTG\MVC\Components\ExcelGenerator;
 use Src\App\Controllers\User\TemplateController;
 use Src\Models\Collaborator;
+use Src\Utils\ErrorMessages;
 
 class CollaboratorsController extends TemplateController 
 {
@@ -34,8 +35,7 @@ class CollaboratorsController extends TemplateController
     {
         $dbCollaborator = new Collaborator();
         if(!$dbCollaborator->loadData(['usu_id' => $this->session->getAuth()->id] + $data)->save()) {
-            $this->setMessage('error', _('Erros de validação! Verifique os campos.'))
-                ->setErrors($dbCollaborator->getFirstErrors())->APIResponse([], 422);
+            $this->setMessage('error', ErrorMessages::form())->setErrors($dbCollaborator->getFirstErrors())->APIResponse([], 422);
             return;
         }
 
@@ -50,8 +50,7 @@ class CollaboratorsController extends TemplateController
             $this->setMessage('error', _('Nenhum colaborador foi encontrado!'))->APIResponse([], 404);
             return;
         } elseif(!$dbCollaborator->loadData($data)->save()) {
-            $this->setMessage('error', _('Erros de validação! Verifique os campos.'))
-                ->setErrors($dbCollaborator->getFirstErrors())->APIResponse([], 422);
+            $this->setMessage('error', ErrorMessages::form())->setErrors($dbCollaborator->getFirstErrors())->APIResponse([], 422);
             return;
         }
 
@@ -170,9 +169,9 @@ class CollaboratorsController extends TemplateController
             }
         }
 
-        $excel = new ExcelGenerator($excelData, _('lista-de-colaboradores'));
+        $excel = new ExcelGenerator($excelData, _('Lista de Colaboradores'));
         if(!$excel->render()) {
-            $this->session->setFlash('error', _('Lamentamos, mas não foi possível gerar o excel!'));
+            $this->session->setFlash('error', ErrorMessages::excel());
             $this->redirect('user.collaborators.index');
         }
 

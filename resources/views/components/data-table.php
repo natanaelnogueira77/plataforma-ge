@@ -5,7 +5,7 @@
             if($headers):
                 foreach($headers as $info => $head): 
                 ?>
-                <th class="align-middle">
+                <th class="align-middle <?= $head['classes'] ?>">
                     <?php if($head['sort']): ?>
                     <div class="d-flex justify-content-between align-items-center">
                         <p class="mb-0"><?= $head["text"] ?></p>

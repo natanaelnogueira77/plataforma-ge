@@ -7,6 +7,7 @@ use Src\App\Controllers\User\TemplateController;
 use Src\Models\Product;
 use Src\Models\ProductInput;
 use Src\Models\User;
+use Src\Utils\ErrorMessages;
 
 class ProductInputsController extends TemplateController 
 {
@@ -40,8 +41,7 @@ class ProductInputsController extends TemplateController
     {
         $dbProductInput = new ProductInput();
         if(!$dbProductInput->loadData(['usu_id' => $this->session->getAuth()->id] + $data)->save()) {
-            $this->setMessage('error', _('Erros de validação! Verifique os campos.'))
-                ->setErrors($dbProductInput->getFirstErrors())->APIResponse([], 422);
+            $this->setMessage('error', ErrorMessages::form())->setErrors($dbProductInput->getFirstErrors())->APIResponse([], 422);
             return;
         }
 
@@ -67,13 +67,13 @@ class ProductInputsController extends TemplateController
         ]);
 
         if(!$dbProductInput->save()) {
-            $this->setMessage('error', _('Erros de validação! Verifique os campos.'))
-                ->setErrors($dbProductInput->getFirstErrors())->APIResponse([], 422);
+            $this->setMessage('error', ErrorMessages::form())->setErrors($dbProductInput->getFirstErrors())->APIResponse([], 422);
             return;
         }
 
         $this->setMessage(
-            'success', sprintf(_('Os dados da entrada do produto "%s" foram alterados com sucesso!'), $dbProductInput->product()->desc_short)
+            'success', 
+            sprintf(_('Os dados da entrada do produto "%s" foram alterados com sucesso!'), $dbProductInput->product()->desc_short)
         )->APIResponse([], 200);
     }
 
@@ -239,9 +239,9 @@ class ProductInputsController extends TemplateController
             }
         }
 
-        $excel = new ExcelGenerator($excelData, _('lista-de-entradas'));
+        $excel = new ExcelGenerator($excelData, _('Lista de Entradas'));
         if(!$excel->render()) {
-            $this->session->setFlash('error', _('Lamentamos, mas não foi possível gerar o excel!'));
+            $this->session->setFlash('error', ErrorMessages::excel());
             $this->redirect('user.productInputs.index');
         }
 

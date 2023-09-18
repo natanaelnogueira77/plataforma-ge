@@ -23,7 +23,7 @@
         <div class="btn-actions-pane-right">
             <div role="group" class="btn-group-sm btn-group">
                 <a class="btn btn-lg btn-primary" href="<?= $router->route('admin.users.create') ?>">
-                    <?= _('Criar Usuário') ?>
+                    <?= _('Cadastrar Usuário') ?>
                 </a>
             </div>
         </div>

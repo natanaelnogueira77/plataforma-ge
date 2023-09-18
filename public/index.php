@@ -12,19 +12,19 @@ if(file_exists($maintenance = __DIR__ . '/../maintenance.php')) {
 require_once __DIR__ . '/../vendor/autoload.php';
 $app = require_once __DIR__ . '/../config/app.php';
 
-$app->router->namespace('Src\App\Controllers\Web');
+$app->router->namespace('Src\App\Controllers\Auth');
 
 $app->router->group(null);
-$app->router->get('/', 'HomeController:index', 'home.index', \Src\App\Middlewares\GuestMiddleware::class);
-$app->router->post('/', 'HomeController:index', 'home.index', \Src\App\Middlewares\GuestMiddleware::class);
+$app->router->get('/', 'AuthController:index', 'home.index', \Src\App\Middlewares\GuestMiddleware::class);
+$app->router->post('/', 'AuthController:index', 'home.index', \Src\App\Middlewares\GuestMiddleware::class);
 
-$app->router->namespace('Src\App\Controllers\Auth');
+$app->router->group('login');
+$app->router->post('/expired', 'AuthController:expired', 'auth.expired');
+$app->router->post('/check', 'AuthController:check', 'auth.check');
 
 $app->router->group('entrar', \Src\App\Middlewares\GuestMiddleware::class);
 $app->router->get('/', 'AuthController:index', 'auth.index');
 $app->router->post('/', 'AuthController:index', 'auth.index');
-$app->router->post('/expired', 'AuthController:expired', 'auth.expired');
-$app->router->post('/check', 'AuthController:check', 'auth.check');
 
 $app->router->group('redefinir-senha', \Src\App\Middlewares\GuestMiddleware::class);
 $app->router->get('/', 'ResetPasswordController:index', 'resetPassword.index');
@@ -67,12 +67,6 @@ $app->router->delete('/{user_id}', 'UsersController:delete', 'admin.users.delete
 $app->router->get('/criar', 'UsersController:create', 'admin.users.create');
 $app->router->get('/list', 'UsersController:list', 'admin.users.list');
 
-$app->router->namespace('Src\App\Controllers\Web');
-
-$app->router->group('contato');
-$app->router->get('/', 'ContactController:index', 'contact.index');
-$app->router->post('/', 'ContactController:index', 'contact.index');
-
 $app->router->namespace('Src\App\Controllers\User');
 
 $app->router->group('u', \Src\App\Middlewares\UserMiddleware::class);
@@ -88,13 +82,19 @@ $app->router->get('/list', 'PiecesManagementController:list', 'user.piecesManage
 
 $app->router->group('u/controle-de-reformados', \Src\App\Middlewares\LeaderMiddleware::class);
 $app->router->get('/', 'ReformedsManagementController:index', 'user.reformedsManagement.index');
+$app->router->get('/{reformation_id}', 'ReformedsManagementController:show', 'user.reformedsManagement.show');
+$app->router->put('/{reformation_id}', 'ReformedsManagementController:update', 'user.reformedsManagement.update');
+$app->router->delete('/{reformation_id}', 'ReformedsManagementController:delete', 'user.reformedsManagement.delete');
+$app->router->post('/turn-start', 'ReformedsManagementController:turnStart', 'user.reformedsManagement.turnStart');
+$app->router->post('/turn-end', 'ReformedsManagementController:turnEnd', 'user.reformedsManagement.turnEnd');
 $app->router->get('/list', 'ReformedsManagementController:list', 'user.reformedsManagement.list');
+$app->router->get('/export', 'ReformedsManagementController:export', 'user.reformedsManagement.export');
 
 $app->router->group('u/produtividade-do-dia', \Src\App\Middlewares\LeaderMiddleware::class);
 $app->router->get('/', 'DayProductivityController:index', 'user.dayProductivity.index');
 $app->router->get('/list', 'DayProductivityController:list', 'user.dayProductivity.list');
 
-$app->router->group('u/resumo-operacional', \Src\App\Middlewares\OperatorMiddleware::class);
+$app->router->group('u/resumo-operacional', \Src\App\Middlewares\UserMiddleware::class);
 $app->router->get('/', 'OperationalResumeController:index', 'user.operationalResume.index');
 $app->router->get('/list', 'OperationalResumeController:list', 'user.operationalResume.list');
 

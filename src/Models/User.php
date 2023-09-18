@@ -2,6 +2,7 @@
 
 namespace Src\Models;
 
+use DateTime;
 use GTG\MVC\DB\UserModel;
 use Src\Models\SocialUser;
 use Src\Models\UserMeta;
@@ -13,9 +14,9 @@ class User extends UserModel
     const UT_LEADER = 2;
     const UT_OPERATOR = 3;
 
-    public $socialUser;
-    public $userMetas = [];
-    public $userType;
+    public ?SocialUser $socialUser = null;
+    public ?array $userMetas = [];
+    public ?UserType $userType = null;
     
     public static function tableName(): string 
     {
@@ -29,7 +30,14 @@ class User extends UserModel
 
     public static function attributes(): array 
     {
-        return ['utip_id', 'name', 'email', 'password', 'token', 'slug'];
+        return [
+            'utip_id', 
+            'name', 
+            'email', 
+            'password', 
+            'token', 
+            'slug'
+        ];
     }
 
     public static function metaTableData(): ?array 
@@ -64,50 +72,32 @@ class User extends UserModel
             'slug' => [
                 [self::RULE_REQUIRED, 'message' => _('O apelido é obrigatório!')],
                 [self::RULE_MAX, 'max' => 100, 'message' => sprintf(_('O apelido deve conter no máximo %s caractéres!'), 100)]
+            ],
+            self::RULE_RAW => [
+                function ($model) {
+                    if(!$model->hasError('email')) {
+                        if((new self())->get(['email' => $model->email] + (isset($model->id) ? ['!=' => ['id' => $model->id]] : []))->count()) {
+                            $model->addError('email', _('O email informado já está em uso! Tente outro.'));
+                        }
+                    }
+                    
+                    if(!$model->hasError('slug')) {
+                        if((new self())->get(['slug' => $model->slug] + (isset($model->id) ? ['!=' => ['id' => $model->id]] : []))->count()) {
+                            $model->addError('slug', _('O apelido informado já está em uso! Tente outro.'));
+                        }
+                    }
+                }
             ]
         ];
     }
 
-    public function validate(): bool 
-    {
-        parent::validate();
-
-        if(!$this->hasError('email')) {
-            if((new self())->get(['email' => $this->email] + (isset($this->id) ? ['!=' => ['id' => $this->id]] : []))->count()) {
-                $this->addError('email', _('O email informado já está em uso! Tente outro.'));
-            }
-        }
-        
-        if(!$this->hasError('slug')) {
-            if((new self())->get(['slug' => $this->slug] + (isset($this->id) ? ['!=' => ['id' => $this->id]] : []))->count()) {
-                $this->addError('slug', _('O apelido informado já está em uso! Tente outro.'));
-            }
-        }
-
-        return !$this->hasErrors();
-    }
-
     public function save(): bool 
     {
-        $this->slug = $this->slug ? slugify($this->slug) : ($this->name ? slugify($this->name) : null);
+        $this->slug = is_string($this->slug) ? slugify($this->slug) : $this->getSlugByName();
         $this->email = strtolower($this->email);
         $this->token = is_string($this->email) ? md5($this->email) : null;
 
         return parent::save();
-    }
-
-    public static function insertMany(array $objects): array|false 
-    {
-        if(count($objects) > 0) {
-            foreach($objects as $object) {
-                if(is_array($object)) $object = (new self())->loadData($object);
-                $object->slug = $object->slug ? slugify($object->slug) : ($object->name ? slugify($object->name) : null);
-                $object->email = strtolower($object->email);
-                $object->token = is_string($object->email) ? md5($object->email) : null;
-            }
-        }
-
-        return parent::insertMany($objects);
     }
 
     public function encode(): static 
@@ -195,5 +185,10 @@ class User extends UserModel
     public function verifyPassword(string $password): bool 
     {
         return $this->password ? password_verify($password, $this->password) : false;
+    }
+    
+    public function getSlugByName(): ?string 
+    {
+        return is_string($this->name) ? slugify($this->name . (new DateTime())->getTimestamp()) : null;
     }
 }

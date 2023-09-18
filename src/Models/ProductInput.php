@@ -12,8 +12,8 @@ class ProductInput extends DBModel
     const CS_ORDERED = 2;
     const CS_AWAITING = 3;
 
-    public $product;
-    public $user;
+    public ?Product $product = null;
+    public ?User $user = null;
 
     public static function tableName(): string 
     {
@@ -27,7 +27,16 @@ class ProductInput extends DBModel
 
     public static function attributes(): array 
     {
-        return ['usu_id', 'pro_id', 'boxes', 'units', 'street', 'position', 'height', 'c_status'];
+        return [
+            'usu_id', 
+            'pro_id', 
+            'boxes', 
+            'units', 
+            'street', 
+            'position', 
+            'height', 
+            'c_status'
+        ];
     }
 
     public function rules(): array 
@@ -62,35 +71,32 @@ class ProductInput extends DBModel
                     [self::RULE_REQUIRED, 'message' => _('A altura é obrigatória!')]
                 ]
             ] : [] 
-        );
-    }
-
-    public function validate(): bool 
-    {
-        parent::validate();
-
-        if(!$this->hasError('pro_id')) {
-            if($stock = Stock::getByProductId($this->pro_id)) {
-                if($this->id) {
-                    $boxesAmount = $this->boxes;
-                    $unitsAmount = $this->units;
-
-                    $oldProductInput = (new self())->findById($this->id);
-                    $boxesAmount = $oldProductInput->boxes - $boxesAmount;
-                    $unitsAmount = $oldProductInput->units - $unitsAmount;
-                    
-                    if(!$this->hasError('boxes') && $boxesAmount > $stock->boxes) {
-                        $this->addError('boxes', sprintf(_('O novo número que você determinou removerá mais do que está no estoque!')));
-                    }
+        ) + [
+            self::RULE_RAW => [
+                function ($model) {
+                    if(!$model->hasError('pro_id')) {
+                        if($stock = Stock::getByProductId($model->pro_id)) {
+                            if($model->id) {
+                                $boxesAmount = $model->boxes;
+                                $unitsAmount = $model->units;
             
-                    if(!$this->hasError('units') && $unitsAmount > $stock->units) {
-                        $this->addError('units', sprintf(_('O novo número que você determinou removerá mais do que está no estoque!')));
+                                $oldProductInput = (new self())->findById($model->id);
+                                $boxesAmount = $oldProductInput->boxes - $boxesAmount;
+                                $unitsAmount = $oldProductInput->units - $unitsAmount;
+                                
+                                if(!$model->hasError('boxes') && $boxesAmount > $stock->boxes) {
+                                    $model->addError('boxes', sprintf(_('O novo número que você determinou removerá mais do que está no estoque!')));
+                                }
+                        
+                                if(!$model->hasError('units') && $unitsAmount > $stock->units) {
+                                    $model->addError('units', sprintf(_('O novo número que você determinou removerá mais do que está no estoque!')));
+                                }
+                            }
+                        }
                     }
                 }
-            }
-        }
-
-        return !$this->hasErrors();
+            ]
+        ];
     }
 
     public function save(): bool 
@@ -147,12 +153,28 @@ class ProductInput extends DBModel
 
     public static function withProduct(array $objects, array $filters = [], string $columns = '*'): array
     {
-        return self::withBelongsTo($objects, Product::class, 'pro_id', 'product', 'id', $filters, $columns);
+        return self::withBelongsTo(
+            $objects, 
+            Product::class, 
+            'pro_id', 
+            'product', 
+            'id', 
+            $filters, 
+            $columns
+        );
     }
 
     public static function withUser(array $objects, array $filters = [], string $columns = '*'): array
     {
-        return self::withBelongsTo($objects, User::class, 'usu_id', 'user', 'id', $filters, $columns);
+        return self::withBelongsTo(
+            $objects, 
+            User::class, 
+            'usu_id', 
+            'user', 
+            'id', 
+            $filters, 
+            $columns
+        );
     }
 
     public static function getStates(): array 

@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'pc/plataforma-ge',
-        'pretty_version' => '1.0.0+no-version-set',
-        'version' => '1.0.0.0',
-        'reference' => NULL,
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
+        'reference' => '7fca8a0e084a64266662560a8ed362df0b7a9d26',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -47,9 +47,9 @@
             'dev_requirement' => false,
         ),
         'gtg/php-mvc-core' => array(
-            'pretty_version' => 'v1.0.7',
-            'version' => '1.0.7.0',
-            'reference' => '8f3a6dc5c0b9e8e98ddc2eaca7fb0691c133c79e',
+            'pretty_version' => 'v1.0.9',
+            'version' => '1.0.9.0',
+            'reference' => '1fd7ab52011c48e55c48ccadb765de410700df19',
             'type' => 'library',
             'install_path' => __DIR__ . '/../gtg/php-mvc-core',
             'aliases' => array(),
@@ -83,9 +83,9 @@
             'dev_requirement' => false,
         ),
         'pc/plataforma-ge' => array(
-            'pretty_version' => '1.0.0+no-version-set',
-            'version' => '1.0.0.0',
-            'reference' => NULL,
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
+            'reference' => '7fca8a0e084a64266662560a8ed362df0b7a9d26',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

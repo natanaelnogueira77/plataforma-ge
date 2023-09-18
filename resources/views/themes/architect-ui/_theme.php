@@ -8,6 +8,20 @@
     <link rel="stylesheet" href="<?= url("public/assets/css/custom.css") ?>">
     <link rel="stylesheet" href="<?= url("public/assets/css/icofont.min.css") ?>">
     <link rel="stylesheet" href="<?= url("public/assets/css/toastr.min.css") ?>">
+    <?php if($fullBackground): ?>
+    <style>
+        .full-background {
+            background-image: url("<?= $fullBackground ?>");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center center;
+            position: fixed;
+            opacity: 0.7;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+    <?php endif; ?>
     <link rel="stylesheet" href="https//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <?= $this->section("css"); ?>
     <link rel="shortcut icon" href="<?= $shortcutIcon ?>" type="image/png">
@@ -38,9 +52,16 @@
                 }
             ?>
             <div class="app-main__outer">
+                <?php if($fullBackground): ?>
+                <div class="full-background"></div>
+                <?php endif; ?>
+                <?php if(!$noMainInner): ?>
                 <div class="app-main__inner">
                     <?= $this->section("content"); ?>
                 </div>
+                <?php else: ?>
+                <?= $this->section("content"); ?>
+                <?php endif; ?>
                 <?php 
                     if(!$noFooter) {
                         $this->insert("themes/architect-ui/partials/footer", $footer);
@@ -103,11 +124,7 @@
         ]);
 
         if($session->getAuth()) {
-            $this->insert('components/expired-session', [
-                'action' => $router->route('auth.check'),
-                'return' => $router->route('auth.index'),
-                'check' => $router->route('auth.expired')
-            ]);
+            $this->insert('components/expired-session');
         }
     ?>
 </body>

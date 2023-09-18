@@ -7,7 +7,7 @@ use Src\Models\User;
 
 class SocialUser extends DBModel 
 {
-    public $user;
+    public ?User $user = null;
 
     public static function tableName(): string 
     {
@@ -21,7 +21,12 @@ class SocialUser extends DBModel
 
     public static function attributes(): array 
     {
-        return ['usu_id', 'social_id', 'email', 'social'];
+        return [
+            'usu_id', 
+            'social_id', 
+            'email', 
+            'social'
+        ];
     }
 
     public function rules(): array 
@@ -40,25 +45,21 @@ class SocialUser extends DBModel
                 [self::RULE_REQUIRED, 'message' => _('O email é obrigatório!')],
                 [self::RULE_EMAIL, 'message' => _('O email é inválido!')],
                 [self::RULE_MAX, 'max' => 100, 'message' => sprintf(_('O email precisa ter no máximo %s caractéres!'), 100)]
+            ],
+            self::RULE_RAW => [
+                function ($model) {
+                    if(!$model->hasError('social') && !in_array($model->social, self::getSocialNames())) {
+                        $model->addError('social', _('O nome da rede social é inválido!'));
+                    }
+            
+                    if(!$model->hasError('email')) {
+                        if((new self())->get(['email' => $model->email] + (isset($model->id) ? ['!=' => ['id' => $model->id]] : []))->count()) {
+                            $model->addError('email', _('O email informado já está em uso! Tente outro.'));
+                        }
+                    }
+                }
             ]
         ];
-    }
-
-    public function validate(): bool 
-    {
-        parent::validate();
-
-        if(!$this->hasError('social') && !in_array($this->social, self::getSocialNames())) {
-            $this->addError('social', _('O nome da rede social é inválido!'));
-        }
-
-        if(!$this->hasError('email')) {
-            if((new self())->get(['email' => $this->email] + (isset($this->id) ? ['!=' => ['id' => $this->id]] : []))->count()) {
-                $this->addError('email', _('O email informado já está em uso! Tente outro.'));
-            }
-        }
-
-        return !$this->hasErrors();
     }
 
     public function user(string $columns = '*'): ?User

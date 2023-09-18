@@ -8,6 +8,7 @@ use Src\Models\Product;
 use Src\Models\ProductInput;
 use Src\Models\Stock;
 use Src\Models\User;
+use Src\Utils\ErrorMessages;
 
 class StocksController extends TemplateController 
 {
@@ -159,9 +160,9 @@ class StocksController extends TemplateController
             }
         }
 
-        $excel = new ExcelGenerator($excelData, _('lista-de-estoque'));
+        $excel = new ExcelGenerator($excelData, _('Lista de Estoque'));
         if(!$excel->render()) {
-            $this->session->setFlash('error', _('Lamentamos, mas não foi possível gerar o excel!'));
+            $this->session->setFlash('error', ErrorMessages::excel());
             $this->redirect('user.stocks.index');
         }
 

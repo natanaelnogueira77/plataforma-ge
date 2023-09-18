@@ -153,7 +153,7 @@ function slugify(string $str, string $delimiter = '-'): string
             ), 
             $delimiter
         )
-    );;
+    );
 }
 
 function writeIniFile(array $array, string $path, bool $hasSections = false): bool 

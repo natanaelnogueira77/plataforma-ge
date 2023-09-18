@@ -6,6 +6,7 @@ use DateTime;
 
 abstract class Model 
 {
+    public const RULE_RAW = 'raw';
     public const RULE_DATETIME = 'date';
     public const RULE_EMAIL = 'email';
     public const RULE_IN = 'in';
@@ -13,6 +14,9 @@ abstract class Model
     public const RULE_MATCH = 'match';
     public const RULE_MAX = 'max';
     public const RULE_MIN = 'min';
+    public const RULE_EQUAL_TO = 'equal_to';
+    public const RULE_SMALLER_THAN = 'smaller_than';
+    public const RULE_LARGER_THAN = 'larger_than';
     public const RULE_REQUIRED = 'required';
 
     public array $errors = [];
@@ -43,43 +47,63 @@ abstract class Model
     public function validate(): bool
     {
         foreach($this->rules() as $attribute => $rules) {
-            $value = $this->{$attribute};
-            foreach($rules as $rule) {
-                $ruleName = $rule;
-                if(!is_string($ruleName)) {
-                    $ruleName = $rule[0];
+            if($attribute === self::RULE_RAW) {
+                foreach($rules as $function) {
+                    if(is_callable($function)) {
+                        $function($this);
+                    }
                 }
+            } else {
+                $value = $this->{$attribute};
+                foreach($rules as $rule) {
+                    $ruleName = $rule;
+                    if(!is_string($ruleName)) {
+                        $ruleName = $rule[0];
+                    }
+    
+                    if($ruleName === self::RULE_REQUIRED && !$value) {
+                        $this->addErrorForRule($attribute, self::RULE_REQUIRED, $rule);
+                    }
+    
+                    if($ruleName === self::RULE_EMAIL && !filter_var($value, FILTER_VALIDATE_EMAIL)) {
+                        $this->addErrorForRule($attribute, self::RULE_EMAIL, $rule);
+                    }
+    
+                    if($ruleName === self::RULE_INT && !filter_var($value, FILTER_VALIDATE_INT)) {
+                        $this->addErrorForRule($attribute, self::RULE_INT, $rule);
+                    }
+                    
+                    if($ruleName === self::RULE_MIN && $value && strlen($value) < $rule['min']) {
+                        $this->addErrorForRule($attribute, self::RULE_MIN, $rule);
+                    }
+    
+                    if($ruleName === self::RULE_MAX && $value && strlen($value) > $rule['max']) {
+                        $this->addErrorForRule($attribute, self::RULE_MAX, $rule);
+                    }
+    
+                    if($ruleName === self::RULE_MATCH && $value !== $this->{$rule['match']}) {
+                        $this->addErrorForRule($attribute, self::RULE_MATCH, $rule);
+                    }
+                    
+                    if($ruleName === self::RULE_EQUAL_TO && $value != $rule['value']) {
+                        $this->addErrorForRule($attribute, self::RULE_EQUAL_TO, $rule);
+                    }
 
-                if($ruleName === self::RULE_REQUIRED && !$value) {
-                    $this->addErrorForRule($attribute, self::RULE_REQUIRED, $rule);
-                }
+                    if($ruleName === self::RULE_SMALLER_THAN && $value >= $rule['value']) {
+                        $this->addErrorForRule($attribute, self::RULE_SMALLER_THAN, $rule);
+                    }
 
-                if($ruleName === self::RULE_EMAIL && !filter_var($value, FILTER_VALIDATE_EMAIL)) {
-                    $this->addErrorForRule($attribute, self::RULE_EMAIL, $rule);
-                }
-
-                if($ruleName === self::RULE_INT && !filter_var($value, FILTER_VALIDATE_INT)) {
-                    $this->addErrorForRule($attribute, self::RULE_INT, $rule);
-                }
-                
-                if($ruleName === self::RULE_MIN && $value && strlen($value) < $rule['min']) {
-                    $this->addErrorForRule($attribute, self::RULE_MIN, $rule);
-                }
-
-                if($ruleName === self::RULE_MAX && $value && strlen($value) > $rule['max']) {
-                    $this->addErrorForRule($attribute, self::RULE_MAX, $rule);
-                }
-
-                if($ruleName === self::RULE_MATCH && $value !== $this->{$rule['match']}) {
-                    $this->addErrorForRule($attribute, self::RULE_MATCH, $rule);
-                }
-
-                if($ruleName === self::RULE_IN && $value && !in_array($value, $rule['values'])) {
-                    $this->addErrorForRule($attribute, self::RULE_IN, $rule);
-                }
-
-                if($ruleName === self::RULE_DATETIME && $value && !DateTime::createFromFormat($rule['pattern'], $value)) {
-                    $this->addErrorForRule($attribute, self::RULE_DATETIME, $rule);
+                    if($ruleName === self::RULE_LARGER_THAN && $value <= $rule['value']) {
+                        $this->addErrorForRule($attribute, self::RULE_LARGER_THAN, $rule);
+                    }
+    
+                    if($ruleName === self::RULE_IN && $value && !in_array($value, $rule['values'])) {
+                        $this->addErrorForRule($attribute, self::RULE_IN, $rule);
+                    }
+    
+                    if($ruleName === self::RULE_DATETIME && $value && !DateTime::createFromFormat($rule['pattern'], $value)) {
+                        $this->addErrorForRule($attribute, self::RULE_DATETIME, $rule);
+                    }
                 }
             }
         }

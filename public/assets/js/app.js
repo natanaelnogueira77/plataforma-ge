@@ -3,30 +3,24 @@ class App {
         this.mediaLibrary = null;
     }
 
-    form(elem, callback = function () {}) {
+    form(elem, callback = function () {}, objectify = false) {
         const object = this;
 
         elem.submit(function (e) {
             e.preventDefault();
             var form = $(this);
-
-            var action = form.attr("action");
-            var method = form.attr("method");
-            var data = form.serialize();
+            var data = objectify ? object.objectifyForm(form) : form.serialize();
 
             $.ajax({
-                url: action,
-                type: method,
+                url: form.attr("action"),
+                type: form.attr("method"),
                 data: data,
                 dataType: "json",
                 beforeSend: function () {
                     object.load("open");
                 },
                 success: function(response) {
-                    elem.find(".is-invalid").toggleClass("is-invalid");
-                    elem.find("[data-error]").html(``);
-                    elem.find(".invalid-feedback").html(``);
-
+                    object.showFormErrors(elem, {}, elem.data('errors') ?? 'name');
                     if(response.message) {
                         object.showMessage(response.message[1], response.message[0]);
                     }
@@ -144,7 +138,7 @@ class App {
                     object.load("close");
                 }
             }
-        })
+        });
     }
 
     load(action) {
@@ -239,48 +233,35 @@ class App {
         $(elem).val(textArea.slice(0, curPos) + text + textArea.slice(curPos));
     }
 
-    setModal(modal, data = {}) {
-        const modal_header = modal.find(".modal-header");
-        const modal_title = modal_header.find(".modal-title");
-
-        if(data) {
-            if(data.effect) {
-                modal.attr("class", `modal ${data.effect}`);
-            }
-
-            if(!data.noBackdrop) {
-                modal.attr("data-bs-backdrop", "static");
-            }
-
-            if(!data.keyboard) {
-                modal.attr("data-bs-keyboard", "false");
-            }
-
-            if(data.size) {
-                modal.find(".modal-dialog").attr("class", `modal-dialog modal-${data.size}`)
-            }
-
-            if(data.title) {
-                modal_title.text(data.title);
-            }
-        }
-    }
-
     cleanForm(elem) {
         elem.find("input, textarea, select").each(function () {
-            if($(this).attr("type") !== "submit") {
+            if($(this).attr("type") !== "submit" && $(this).attr("type") !== "checkbox" && $(this).attr("type") !== "radio") {
                 $(this).val(``);
+            } else if($(this).attr("type") == "checkbox" || $(this).attr("type") == "radio") {
+                $(this).prop('checked', false);
             }
         });
     }
 
     populateForm(elem, content = {}, attr = 'id') {
         elem.find("input, textarea, select").each(function () {
-            if($(this).attr("type") !== "submit") {
+            if($(this).attr("type") !== "submit" && $(this).attr("type") !== "checkbox" && $(this).attr("type") !== "radio") {
                 if(content[$(this).attr(attr)] != '') {
                     $(this).val(content[$(this).attr(attr)]);
                 } else {
                     $(this).val(``);
+                }
+            } else if($(this).attr("type") == "checkbox") {
+                if(content[$(this).attr(attr)]) {
+                    $(this).prop('checked', true);
+                } else {
+                    $(this).prop('checked', false);
+                }
+            } else if($(this).attr("type") == "radio") {
+                if(content[$(this).attr(attr)] == $(this).val()) {
+                    $(this).prop('checked', true);
+                } else {
+                    $(this).prop('checked', false);
                 }
             }
         });

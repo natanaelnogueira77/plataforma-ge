@@ -162,7 +162,7 @@ class DataTable
     {
         if(this.form) {
             for(const [index, value] of Object.entries(this.urlParams)) {
-                this.form.find(`[name=${index}]`).val(value);
+                this.form.find(`[name='${index}']`).val(value);
             }
         }
 

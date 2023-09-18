@@ -93,36 +93,36 @@ class m0001_initial extends Migration
             $table->timestamps();
         });
 
-        $this->exec("
-            CREATE PROCEDURE `SP_UpdateStock`(`id_prod` int, `boxes_add` int, `units_add` int)
-            BEGIN
-                declare counter int(11);
+        $this->db->createProcedure('SP_UpdateStock', function ($procedure) {
+            $procedure->integer('id_prod');
+            $procedure->integer('boxes_add');
+            $procedure->integer('units_add');
+            $procedure->statement("
+                DECLARE estoque_id int(11);
+                
+                SELECT id into estoque_id FROM estoque WHERE pro_id = id_prod LIMIT 1;
             
-                SELECT count(*) into counter FROM estoque WHERE pro_id = id_prod;
-            
-                IF counter > 0 THEN
+                IF estoque_id > 0 THEN
                     UPDATE estoque SET boxes = boxes + boxes_add, units = units + units_add
-                    WHERE pro_id = id_prod;
+                    WHERE id = estoque_id;
                 ELSE
-                    INSERT INTO estoque (pro_id, boxes, units) values (id_prod, boxes_add, units_add);
+                    INSERT INTO estoque (pro_id, boxes, units) VALUES (id_prod, boxes_add, units_add);
                 END IF;
-            END;
-        ");
+            ");
+        });
         
-        $this->exec("
-            CREATE TRIGGER `TRG_ProductInput_AI` AFTER INSERT ON `produto_entrada`
-            FOR EACH ROW
-            BEGIN
+        $this->db->createTrigger('TRG_ProductInput_AI', function ($trigger) {
+            $trigger->event('AFTER INSERT ON `produto_entrada` FOR EACH ROW');
+            $trigger->statement("
                 IF new.c_status = 1 THEN 
                     CALL SP_UpdateStock (new.pro_id, new.boxes, new.units);
                 END IF;
-            END;
-        ");
+            ");
+        });
         
-        $this->exec("
-            CREATE TRIGGER `TRG_ProductInput_AU` AFTER UPDATE ON `produto_entrada`
-            FOR EACH ROW
-            BEGIN 
+        $this->db->createTrigger('TRG_ProductInput_AU', function ($trigger) {
+            $trigger->event('AFTER UPDATE ON `produto_entrada` FOR EACH ROW');
+            $trigger->statement("
                 IF old.c_status = 1 AND new.c_status = 1 THEN 
                     CALL SP_UpdateStock (new.pro_id, new.boxes - old.boxes, new.units - old.units);
                 ELSEIF old.c_status != 1 AND new.c_status = 1 THEN 
@@ -130,53 +130,43 @@ class m0001_initial extends Migration
                 ELSEIF old.c_status = 1 AND new.c_status != 1 THEN 
                     CALL SP_UpdateStock (new.pro_id, old.boxes * -1, old.units * -1); 
                 END IF;
-            END;
-        ");
+            ");
+        });
         
-        $this->exec("
-            CREATE TRIGGER `TRG_ProductInput_AD` AFTER DELETE ON `produto_entrada`
-            FOR EACH ROW
-            BEGIN 
+        $this->db->createTrigger('TRG_ProductInput_AD', function ($trigger) {
+            $trigger->event('AFTER DELETE ON `produto_entrada` FOR EACH ROW');
+            $trigger->statement("
                 IF old.c_status = 1 THEN 
                     CALL SP_UpdateStock (old.pro_id, old.boxes * -1, old.units * -1); 
                 END IF;
-            END;
-        ");
+            ");
+        });
 
-        $this->exec("
-            CREATE TRIGGER `TRG_ProductOutput_AI` AFTER INSERT ON `produto_saida`
-            FOR EACH ROW
-            BEGIN
-                CALL SP_UpdateStock (new.pro_id, new.boxes * -1, new.units * -1);
-            END;
-        ");
+        $this->db->createTrigger('TRG_ProductOutput_AI', function ($trigger) {
+            $trigger->event('AFTER INSERT ON `produto_saida` FOR EACH ROW');
+            $trigger->statement("CALL SP_UpdateStock (new.pro_id, new.boxes * -1, new.units * -1);");
+        });
         
-        $this->exec("
-            CREATE TRIGGER `TRG_ProductOutput_AU` AFTER UPDATE ON `produto_saida`
-            FOR EACH ROW
-            BEGIN
-                CALL SP_UpdateStock (new.pro_id, old.boxes - new.boxes, old.units - new.units);
-            END;
-        ");
+        $this->db->createTrigger('TRG_ProductOutput_AU', function ($trigger) {
+            $trigger->event('AFTER UPDATE ON `produto_saida` FOR EACH ROW');
+            $trigger->statement("CALL SP_UpdateStock (new.pro_id, old.boxes - new.boxes, old.units - new.units);");
+        });
 
-        $this->exec("
-            CREATE TRIGGER `TRG_ProductOutput_AD` AFTER DELETE ON `produto_saida`
-            FOR EACH ROW
-            BEGIN
-                CALL SP_UpdateStock (old.pro_id, old.boxes, old.units);
-            END;
-        ");
+        $this->db->createTrigger('TRG_ProductOutput_AD', function ($trigger) {
+            $trigger->event('AFTER DELETE ON `produto_saida` FOR EACH ROW');
+            $trigger->statement("CALL SP_UpdateStock (old.pro_id, old.boxes, old.units);");
+        });
     }
 
     public function down(): void
     {
-        $this->exec('DROP TRIGGER IF EXISTS TRG_ProductInput_AI');
-        $this->exec('DROP TRIGGER IF EXISTS TRG_ProductInput_AU');
-        $this->exec('DROP TRIGGER IF EXISTS TRG_ProductInput_AD');
-        $this->exec('DROP TRIGGER IF EXISTS TRG_ProductOutput_AI');
-        $this->exec('DROP TRIGGER IF EXISTS TRG_ProductOutput_AU');
-        $this->exec('DROP TRIGGER IF EXISTS TRG_ProductOutput_AD');
-        $this->exec('DROP PROCEDURE IF EXISTS SP_UpdateStock');
+        $this->db->dropTriggerIfExists('TRG_ProductInput_AI');
+        $this->db->dropTriggerIfExists('TRG_ProductInput_AU');
+        $this->db->dropTriggerIfExists('TRG_ProductInput_AD');
+        $this->db->dropTriggerIfExists('TRG_ProductOutput_AI');
+        $this->db->dropTriggerIfExists('TRG_ProductOutput_AU');
+        $this->db->dropTriggerIfExists('TRG_ProductOutput_AD');
+        $this->db->dropProcedureIfExists('SP_UpdateStock');
         $this->db->dropTableIfExists('colaborador');
         $this->db->dropTableIfExists('config');
         $this->db->dropTableIfExists('estoque');

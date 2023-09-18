@@ -8,6 +8,7 @@ use Src\Models\Collaborator;
 use Src\Models\Product;
 use Src\Models\ProductOutput;
 use Src\Models\User;
+use Src\Utils\ErrorMessages;
 
 class ProductOutputsController extends TemplateController 
 {
@@ -40,8 +41,7 @@ class ProductOutputsController extends TemplateController
     {
         $dbProductOutput = new ProductOutput();
         if(!$dbProductOutput->loadData(['usu_id' => $this->session->getAuth()->id] + $data)->save()) {
-            $this->setMessage('error', _('Erros de validação! Verifique os campos.'))
-                ->setErrors($dbProductOutput->getFirstErrors())->APIResponse([], 422);
+            $this->setMessage('error', ErrorMessages::form())->setErrors($dbProductOutput->getFirstErrors())->APIResponse([], 422);
             return;
         }
 
@@ -63,8 +63,7 @@ class ProductOutputsController extends TemplateController
         ]);
         
         if(!$dbProductOutput->loadData($data)->save()) {
-            $this->setMessage('error', _('Erros de validação! Verifique os campos.'))
-                ->setErrors($dbProductOutput->getFirstErrors())->APIResponse([], 422);
+            $this->setMessage('error', ErrorMessages::form())->setErrors($dbProductOutput->getFirstErrors())->APIResponse([], 422);
             return;
         }
 
@@ -215,9 +214,9 @@ class ProductOutputsController extends TemplateController
             }
         }
 
-        $excel = new ExcelGenerator($excelData, _('lista-de-saidas'));
+        $excel = new ExcelGenerator($excelData, _('Lista de Saidas'));
         if(!$excel->render()) {
-            $this->session->setFlash('error', _('Lamentamos, mas não foi possível gerar o excel!'));
+            $this->session->setFlash('error', ErrorMessages::excel());
             $this->redirect('user.productOutputs.index');
         }
 

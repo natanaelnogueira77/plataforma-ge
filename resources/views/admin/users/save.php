@@ -1,15 +1,15 @@
 <?php 
     $this->layout("themes/architect-ui/_theme", [
-        'title' => sprintf($dbUser ? _('Editar Usuário | %s') : _('Criar Usuário | %s'), $appData['app_name'])
+        'title' => sprintf($dbUser ? _('Editar Usuário | %s') : _('Cadastrar Usuário | %s'), $appData['app_name'])
     ]);
 ?>
 
 <?php 
     $this->insert('themes/architect-ui/components/title', [
-        'title' => ($dbUser ? sprintf(_("Editar Usuário \"%s\""), $dbUser->name) : _('Criar Usuário')),
+        'title' => ($dbUser ? sprintf(_("Editar Usuário \"%s\""), $dbUser->name) : _('Cadastrar Usuário')),
         'subtitle' => $dbUser 
             ? _('Preencha os dados abaixo para alterar o usuário, e então clique em "Atualizar Usuário"') 
-            : _('Preencha os dados abaixo para criar um usuário, e então clique em "Criar Usuário"'),
+            : _('Preencha os dados abaixo para cadastrar um usuário, e então clique em "Cadastrar Usuário"'),
         'icon' => 'pe-7s-user',
         'icon_color' => 'bg-malibu-beach'
     ]);
@@ -40,26 +40,6 @@
                 </div>
                 
                 <div class="form-group col-md-6">
-                    <label for="slug">
-                        <?= _('Apelido') ?>
-                        <span data-toggle="tooltip" data-placement="top" title="<?= _('Digite um apelido.') ?>">
-                            <i class="icofont-question-circle" style="font-size: 1.1rem;"></i>
-                        </span>
-                    </label>
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">@</span>
-                        </div>
-
-                        <input type="text" id="slug" name="slug" placeholder="<?= _('Informe um apelido...') ?>"
-                            class="form-control" value="<?= $dbUser ? $dbUser->slug : '' ?>" maxlength="50">
-                        <div class="invalid-feedback"></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-row">
-                <div class="form-group col-md-6">
                     <label for="email">
                         <?= _('Email') ?>
                         <span data-toggle="tooltip" data-placement="top" title="<?= _('Digite um email válido.') ?>">
@@ -70,7 +50,9 @@
                         class="form-control" value="<?= $dbUser ? $dbUser->email : '' ?>" maxlength="100">
                     <div class="invalid-feedback"></div>
                 </div>
+            </div>
 
+            <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="utip_id">
                         <?= _('Nível do Usuário') ?>
@@ -145,7 +127,7 @@
 
         <div class="card-footer d-block text-center brb-15">
             <input type="submit" class="btn btn-lg btn-success" 
-                value="<?= $dbUser ? _('Atualizar Usuário') : _('Criar Usuário') ?>">
+                value="<?= $dbUser ? _('Atualizar Usuário') : _('Cadastrar Usuário') ?>">
             <a href="<?= $router->route('admin.users.index') ?>" class="btn btn-danger btn-lg">
                 <?= _('Voltar') ?>
             </a>

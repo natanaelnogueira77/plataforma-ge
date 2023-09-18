@@ -7,11 +7,10 @@
 
         var is_session_expired = false;
 
-        function check_session(url) {
+        function check_session() {
             app.callAjax({
-                url: url,
-                type: "post",
-                data: {},
+                url: <?php echo json_encode($router->route('auth.expired')) ?>,
+                type: 'post',
                 success: function (response) {
                     if(response.success) {
                         login_modal.modal("show");
@@ -23,8 +22,8 @@
         }
         
         var count_interval = setInterval(function () {
-            check_session(<?php echo json_encode($check) ?>);
-            if(is_session_expired == false) {
+            check_session();
+            if(is_session_expired == true) {
                 clearInterval(count_interval);
             }
         }, 10000);
@@ -42,7 +41,7 @@
             <div class="modal-header">
                 <h5 class="modal-title"><?= _('Sessão expirada, faça login') ?></h5>
             </div>
-            <form id="login-form" action="<?= $action ?>" method="post">
+            <form id="login-form" action="<?= $router->route('auth.check') ?>" method="post">
                 <div class="modal-body">
                     <div class="position-relative form-group">
                         <label for="email"><?= _('Email') ?></label>
@@ -60,7 +59,7 @@
                 </div>
                 <div class="modal-footer d-block text-center">
                     <input type="submit" class="btn btn-lg btn-primary" value="<?= _('Entrar') ?>">
-                    <a href="<?= $return ?>" class="btn btn-lg btn-secondary">
+                    <a href="<?= $router->route('auth.index') ?>" class="btn btn-lg btn-secondary">
                         <?= _('Voltar') ?>
                     </a>
                 </div>

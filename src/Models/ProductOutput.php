@@ -10,9 +10,9 @@ use Src\Models\User;
 
 class ProductOutput extends DBModel 
 {
-    public $collaborator;
-    public $product;
-    public $user;
+    public ?Collaborator $collaborator = null;
+    public ?Product $product = null;
+    public ?User $user = null;
 
     public static function tableName(): string 
     {
@@ -26,7 +26,13 @@ class ProductOutput extends DBModel
 
     public static function attributes(): array 
     {
-        return ['usu_id', 'pro_id', 'col_id', 'boxes', 'units'];
+        return [
+            'usu_id', 
+            'pro_id', 
+            'col_id', 
+            'boxes', 
+            'units'
+        ];
     }
 
     public function rules(): array 
@@ -46,44 +52,35 @@ class ProductOutput extends DBModel
             ],
             'units' => [
                 [self::RULE_REQUIRED, 'message' => _('A quantidade de unidades é obrigatória!')]
+            ],
+            self::RULE_RAW => [
+                function ($model) {
+                    if(!$model->hasError('pro_id')) {
+                        if($stock = Stock::getByProductId($model->pro_id)) {
+                            $boxesAmount = $model->boxes;
+                            $unitsAmount = $model->units;
+            
+                            if($model->id) {
+                                $oldProductOutput = (new self())->findById($model->id);
+                                $boxesAmount = $boxesAmount - $oldProductOutput->boxes;
+                                $unitsAmount = $unitsAmount - $oldProductOutput->units;
+                            }
+            
+                            if(!$model->hasError('boxes') && $boxesAmount > $stock->boxes) {
+                                $model->addError('boxes', sprintf(_('O número que você determinou ultrapassa o que está no estoque!')));
+                            }
+                    
+                            if(!$model->hasError('units') && $unitsAmount > $stock->units) {
+                                $model->addError('units', sprintf(_('O número que você determinou ultrapassa o que está no estoque!')));
+                            }
+                        } else {
+                            $model->addError('boxes', sprintf(_('O número que você determinou ultrapassa o que está no estoque!')));
+                            $model->addError('units', sprintf(_('O número que você determinou ultrapassa o que está no estoque!')));
+                        }
+                    }
+                }
             ]
         ];
-    }
-
-    public function validate(): bool 
-    {
-        parent::validate();
-
-        if(!$this->hasError('pro_id')) {
-            if($stock = Stock::getByProductId($this->pro_id)) {
-                $boxesAmount = $this->boxes;
-                $unitsAmount = $this->units;
-
-                if($this->id) {
-                    $oldProductOutput = (new self())->findById($this->id);
-                    $boxesAmount = $boxesAmount - $oldProductOutput->boxes;
-                    $unitsAmount = $unitsAmount - $oldProductOutput->units;
-                }
-
-                if(!$this->hasError('boxes') && $boxesAmount > $stock->boxes) {
-                    $this->addError('boxes', sprintf(_('O número que você determinou ultrapassa o que está no estoque!')));
-                }
-        
-                if(!$this->hasError('units') && $unitsAmount > $stock->units) {
-                    $this->addError('units', sprintf(_('O número que você determinou ultrapassa o que está no estoque!')));
-                }
-            } else {
-                $this->addError('boxes', sprintf(_('O número que você determinou ultrapassa o que está no estoque!')));
-                $this->addError('units', sprintf(_('O número que você determinou ultrapassa o que está no estoque!')));
-            }
-        }
-
-        return !$this->hasErrors();
-    }
-
-    public function destroy(): bool 
-    {
-        return parent::destroy();
     }
 
     public function collaborator(string $columns = '*'): ?Collaborator 
@@ -106,16 +103,40 @@ class ProductOutput extends DBModel
 
     public static function withCollaborator(array $objects, array $filters = [], string $columns = '*'): array
     {
-        return self::withBelongsTo($objects, Collaborator::class, 'col_id', 'collaborator', 'id', $filters, $columns);
+        return self::withBelongsTo(
+            $objects, 
+            Collaborator::class, 
+            'col_id', 
+            'collaborator', 
+            'id', 
+            $filters, 
+            $columns
+        );
     }
 
     public static function withProduct(array $objects, array $filters = [], string $columns = '*'): array
     {
-        return self::withBelongsTo($objects, Product::class, 'pro_id', 'product', 'id', $filters, $columns);
+        return self::withBelongsTo(
+            $objects, 
+            Product::class, 
+            'pro_id', 
+            'product', 
+            'id', 
+            $filters, 
+            $columns
+        );
     }
 
     public static function withUser(array $objects, array $filters = [], string $columns = '*'): array
     {
-        return self::withBelongsTo($objects, User::class, 'usu_id', 'user', 'id', $filters, $columns);
+        return self::withBelongsTo(
+            $objects, 
+            User::class, 
+            'usu_id', 
+            'user', 
+            'id', 
+            $filters, 
+            $columns
+        );
     }
 }
