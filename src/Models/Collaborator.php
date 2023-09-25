@@ -2,6 +2,7 @@
 
 namespace Src\Models;
 
+use DateTime;
 use GTG\MVC\DB\DBModel;
 use Src\Models\User;
 
@@ -71,5 +72,15 @@ class Collaborator extends DBModel
     public static function getByUserId(string $userId, string $columns = '*'): ?self 
     {
         return (new self())->get(['usu_id' => $userId], $columns)->fetch(true);
+    }
+
+    public function getCreatedAtDateTime(): DateTime 
+    {
+        return new DateTime($this->created_at);
+    }
+
+    public function getUpdatedAtDateTime(): DateTime 
+    {
+        return new DateTime($this->updated_at);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Src\Models;
 
+use DateTime;
 use GTG\MVC\DB\DBModel;
 use Src\Models\Product;
 use Src\Models\User;
@@ -189,6 +190,16 @@ class ProductInput extends DBModel
     public function getStatus(): ?string 
     {
         return isset(self::getStates()[$this->c_status]) ? self::getStates()[$this->c_status] : null;
+    }
+
+    public function getCreatedAtDateTime(): DateTime 
+    {
+        return new DateTime($this->created_at);
+    }
+
+    public function getUpdatedAtDateTime(): DateTime 
+    {
+        return new DateTime($this->updated_at);
     }
 
     public function isReceived(): bool 

@@ -201,6 +201,8 @@ class ReformedsManagementController extends TemplateController
             {$tnReformation}.r_date, 
             {$tnReformation}.amount_start as t1_amount_start,
             {$tnReformation}.amount_end as t1_amount_end,
+            {$tnReformation}.created_at as created_at,
+            {$tnReformation}.updated_at as updated_at,
             t2.amount_start as t2_amount_start,
             t2.amount_end as t2_amount_end,
             t3.amount_start as t3_amount_start,
@@ -226,8 +228,8 @@ class ReformedsManagementController extends TemplateController
                     _('Total de quebrados') => $amountStartTotal ?? 0,
                     _('Total de consertados') => $amountEndTotal ?? 0,
                     _('Saldo') => $balance ?? 0,
-                    _('Data de entrada') => $this->getDateTime($reformation->created_at)->format('d/m/Y'),
-                    _('Hora de entrada') => $this->getDateTime($reformation->created_at)->format('H:i')
+                    _('Data de entrada') => $reformation->getCreatedAtDateTime()->format('d/m/Y'),
+                    _('Hora de entrada') => $reformation->getCreatedAtDateTime()->format('H:i')
                 ];
             }
         }

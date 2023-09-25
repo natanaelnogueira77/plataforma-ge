@@ -88,7 +88,7 @@ class ProductsController extends TemplateController
                 $content[] = [
                     'id' => '#' . $product->id,
                     'desc_short' => $product->desc_short,
-                    'created_at' => $this->getDateTime($product->created_at)->format('d/m/Y'),
+                    'created_at' => $product->getCreatedAtDateTime()->format('d/m/Y'),
                     'actions' => "
                         <div class=\"dropup d-inline-block\">
                             <button type=\"button\" aria-haspopup=\"true\" aria-expanded=\"false\" 

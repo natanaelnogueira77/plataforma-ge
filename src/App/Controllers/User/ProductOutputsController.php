@@ -114,7 +114,7 @@ class ProductOutputsController extends TemplateController
                     'boxes' => $productOutput->boxes,
                     'units' => $productOutput->units,
                     'col_id' => $productOutput->collaborator->name,
-                    'created_at' => $this->getDateTime($productOutput->created_at)->format('d/m/Y'),
+                    'created_at' => $productOutput->getCreatedAtDateTime()->format('d/m/Y'),
                     'actions' => "
                         <div class=\"dropup d-inline-block\">
                             <button type=\"button\" aria-haspopup=\"true\" aria-expanded=\"false\" 
@@ -208,8 +208,8 @@ class ProductOutputsController extends TemplateController
                     _('Quantidade de caixas') => $productOutput->boxes,
                     _('Quantidade de unidades') => $productOutput->units,
                     _('Colaborador') =>  $productOutput->collaborator->name,
-                    _('Data de saída') => $this->getDateTime($productOutput->created_at)->format('d/m/Y'),
-                    _('Hora de saída') => $this->getDateTime($productOutput->created_at)->format('H:i')
+                    _('Data de saída') => $productOutput->getCreatedAtDateTime()->format('d/m/Y'),
+                    _('Hora de saída') => $productOutput->getCreatedAtDateTime()->format('H:i')
                 ];
             }
         }

@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2023-09-18 17:36-0300\n"
-"PO-Revision-Date: 2023-09-18 17:37-0300\n"
+"POT-Creation-Date: 2023-09-25 17:52-0300\n"
+"PO-Revision-Date: 2023-09-25 17:52-0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: pt_BR\n"
@@ -709,7 +709,7 @@ msgstr "Segue abaixo o controle de peças"
 #: resources/views/user/reformeds-management/index.php:49
 #: resources/views/user/stocks/components/export-modal.php:13
 #: src/App/Controllers/User/ReformedsManagementController.php:134
-#: src/App/Controllers/User/ReformedsManagementController.php:219
+#: src/App/Controllers/User/ReformedsManagementController.php:221
 msgid "Produto"
 msgstr "Produto"
 
@@ -973,7 +973,7 @@ msgstr "Cadastrar Produto"
 #: resources/views/user/reformeds-management/components/turn-start-modal.php:34
 #: resources/views/user/reformeds-management/index.php:63
 #: src/App/Controllers/User/ReformedsManagementController.php:133
-#: src/App/Controllers/User/ReformedsManagementController.php:218
+#: src/App/Controllers/User/ReformedsManagementController.php:220
 msgid "Data"
 msgstr "Data"
 
@@ -1312,12 +1312,12 @@ msgid "Quantidade de unidades"
 msgstr "Quantidade de unidades"
 
 #: src/App/Controllers/User/ProductInputsController.php:236
-#: src/App/Controllers/User/ReformedsManagementController.php:229
+#: src/App/Controllers/User/ReformedsManagementController.php:231
 msgid "Data de entrada"
 msgstr "Data de entrada"
 
 #: src/App/Controllers/User/ProductInputsController.php:237
-#: src/App/Controllers/User/ReformedsManagementController.php:230
+#: src/App/Controllers/User/ReformedsManagementController.php:232
 msgid "Hora de entrada"
 msgstr "Hora de entrada"
 
@@ -1440,7 +1440,7 @@ msgid "Total de Consertados"
 msgstr "Total de Consertados"
 
 #: src/App/Controllers/User/ReformedsManagementController.php:143
-#: src/App/Controllers/User/ReformedsManagementController.php:228
+#: src/App/Controllers/User/ReformedsManagementController.php:230
 msgid "Saldo"
 msgstr "Saldo"
 
@@ -1448,43 +1448,43 @@ msgstr "Saldo"
 msgid "A entrada foi excluída com sucesso."
 msgstr "A entrada foi excluída com sucesso."
 
-#: src/App/Controllers/User/ReformedsManagementController.php:220
+#: src/App/Controllers/User/ReformedsManagementController.php:222
 msgid "Quantidade de quebrados 1º turno"
 msgstr "Quantidade de quebrados 1º turno"
 
-#: src/App/Controllers/User/ReformedsManagementController.php:221
+#: src/App/Controllers/User/ReformedsManagementController.php:223
 msgid "Quantidade de quebrados 2º turno"
 msgstr "Quantidade de quebrados 2º turno"
 
-#: src/App/Controllers/User/ReformedsManagementController.php:222
+#: src/App/Controllers/User/ReformedsManagementController.php:224
 msgid "Quantidade de quebrados 3º turno"
 msgstr "Quantidade de quebrados 3º turno"
 
-#: src/App/Controllers/User/ReformedsManagementController.php:223
+#: src/App/Controllers/User/ReformedsManagementController.php:225
 msgid "Quantidade de consertados 1º turno"
 msgstr "Quantidade de consertados 1º turno"
 
-#: src/App/Controllers/User/ReformedsManagementController.php:224
+#: src/App/Controllers/User/ReformedsManagementController.php:226
 msgid "Quantidade de consertados 2º turno"
 msgstr "Quantidade de consertados 2º turno"
 
-#: src/App/Controllers/User/ReformedsManagementController.php:225
+#: src/App/Controllers/User/ReformedsManagementController.php:227
 msgid "Quantidade de consertados 3º turno"
 msgstr "Quantidade de consertados 3º turno"
 
-#: src/App/Controllers/User/ReformedsManagementController.php:226
+#: src/App/Controllers/User/ReformedsManagementController.php:228
 msgid "Total de quebrados"
 msgstr "Total de quebrados"
 
-#: src/App/Controllers/User/ReformedsManagementController.php:227
+#: src/App/Controllers/User/ReformedsManagementController.php:229
 msgid "Total de consertados"
 msgstr "Total de consertados"
 
-#: src/App/Controllers/User/ReformedsManagementController.php:235
+#: src/App/Controllers/User/ReformedsManagementController.php:237
 msgid "Lista de Reformados"
 msgstr "Lista de Reformados"
 
-#: src/App/Controllers/User/ReformedsManagementController.php:282
+#: src/App/Controllers/User/ReformedsManagementController.php:284
 #, php-format
 msgid ""
 "A quantidade de quebrados do início do %sº turno do dia %s para o produto "
@@ -1493,7 +1493,7 @@ msgstr ""
 "A quantidade de quebrados do início do %sº turno do dia %s para o produto "
 "\"%s\" foi registrado com sucesso!"
 
-#: src/App/Controllers/User/ReformedsManagementController.php:328
+#: src/App/Controllers/User/ReformedsManagementController.php:330
 #, php-format
 msgid ""
 "A quantidade de consertados do fim do %sº turno do dia %s para o produto "
@@ -1650,25 +1650,25 @@ msgstr "Gerencie os produtos cadastrados no sistema."
 msgid "Gerencie os colaboradores cadastrados no sistema."
 msgstr "Gerencie os colaboradores cadastrados no sistema."
 
-#: src/Models/Collaborator.php:34 src/Models/Product.php:38
-#: src/Models/ProductInput.php:46 src/Models/ProductOutput.php:42
+#: src/Models/Collaborator.php:35 src/Models/Product.php:39
+#: src/Models/ProductInput.php:47 src/Models/ProductOutput.php:43
 #: src/Models/Reformation.php:39 src/Models/ReformationTurnEndForm.php:19
-#: src/Models/ReformationTurnStartForm.php:19 src/Models/SocialUser.php:36
+#: src/Models/ReformationTurnStartForm.php:19 src/Models/SocialUser.php:37
 msgid "O usuário é obrigatório!"
 msgstr "O usuário é obrigatório!"
 
-#: src/Models/Collaborator.php:37 src/Models/ContactForm.php:19
+#: src/Models/Collaborator.php:38 src/Models/ContactForm.php:19
 #: src/Models/User.php:60 src/Models/UserForm.php:25
 msgid "O nome é obrigatório!"
 msgstr "O nome é obrigatório!"
 
-#: src/Models/Collaborator.php:38 src/Models/User.php:61
+#: src/Models/Collaborator.php:39 src/Models/User.php:61
 #: src/Models/UserForm.php:26
 #, php-format
 msgid "O nome deve conter no máximo %s caractéres!"
 msgstr "O nome deve conter no máximo %s caractéres!"
 
-#: src/Models/Collaborator.php:46
+#: src/Models/Collaborator.php:47
 msgid "Você não pode excluir um colaborador vinculado à uma saída de produto!"
 msgstr "Você não pode excluir um colaborador vinculado à uma saída de produto!"
 
@@ -1719,19 +1719,19 @@ msgid "O nome precisa ter no máximo %s caractéres!"
 msgstr "O nome precisa ter no máximo %s caractéres!"
 
 #: src/Models/ContactForm.php:23 src/Models/ForgotPasswordForm.php:17
-#: src/Models/LoginForm.php:17 src/Models/SocialUser.php:45
+#: src/Models/LoginForm.php:17 src/Models/SocialUser.php:46
 #: src/Models/User.php:64 src/Models/UserForm.php:29
 msgid "O email é obrigatório!"
 msgstr "O email é obrigatório!"
 
 #: src/Models/ContactForm.php:24 src/Models/ForgotPasswordForm.php:18
-#: src/Models/LoginForm.php:18 src/Models/SocialUser.php:46
+#: src/Models/LoginForm.php:18 src/Models/SocialUser.php:47
 #: src/Models/User.php:65 src/Models/UserForm.php:30
 msgid "O email é inválido!"
 msgstr "O email é inválido!"
 
 #: src/Models/ContactForm.php:25 src/Models/ForgotPasswordForm.php:19
-#: src/Models/SocialUser.php:47
+#: src/Models/SocialUser.php:48
 #, php-format
 msgid "O email precisa ter no máximo %s caractéres!"
 msgstr "O email precisa ter no máximo %s caractéres!"
@@ -1779,88 +1779,88 @@ msgstr "Este email não foi encontrado!"
 msgid "A senha está incorreta!"
 msgstr "A senha está incorreta!"
 
-#: src/Models/Product.php:41
+#: src/Models/Product.php:42
 msgid "A descrição é obrigatória!"
 msgstr "A descrição é obrigatória!"
 
-#: src/Models/Product.php:42
+#: src/Models/Product.php:43
 #, php-format
 msgid "A descrição deve conter no máximo %s caractéres!"
 msgstr "A descrição deve conter no máximo %s caractéres!"
 
-#: src/Models/ProductInput.php:49 src/Models/ProductOutput.php:45
-#: src/Models/Reformation.php:42 src/Models/ReformationStock.php:34
+#: src/Models/ProductInput.php:50 src/Models/ProductOutput.php:46
+#: src/Models/Reformation.php:42 src/Models/ReformationStock.php:35
 #: src/Models/ReformationTurnEndForm.php:22
-#: src/Models/ReformationTurnStartForm.php:22 src/Models/Stock.php:36
+#: src/Models/ReformationTurnStartForm.php:22 src/Models/Stock.php:37
 msgid "O produto é obrigatório!"
 msgstr "O produto é obrigatório!"
 
-#: src/Models/ProductInput.php:52 src/Models/ProductOutput.php:51
-#: src/Models/Stock.php:39
+#: src/Models/ProductInput.php:53 src/Models/ProductOutput.php:52
+#: src/Models/Stock.php:40
 msgid "A quantidade de caixas é obrigatória!"
 msgstr "A quantidade de caixas é obrigatória!"
 
-#: src/Models/ProductInput.php:55 src/Models/ProductOutput.php:54
-#: src/Models/Stock.php:42
+#: src/Models/ProductInput.php:56 src/Models/ProductOutput.php:55
+#: src/Models/Stock.php:43
 msgid "A quantidade de unidades é obrigatória!"
 msgstr "A quantidade de unidades é obrigatória!"
 
-#: src/Models/ProductInput.php:58
+#: src/Models/ProductInput.php:59
 msgid "O status é obrigatório!"
 msgstr "O status é obrigatório!"
 
-#: src/Models/ProductInput.php:59
+#: src/Models/ProductInput.php:60
 msgid "O status é inválido!"
 msgstr "O status é inválido!"
 
-#: src/Models/ProductInput.php:65
+#: src/Models/ProductInput.php:66
 msgid "A rua é obrigatória!"
 msgstr "A rua é obrigatória!"
 
-#: src/Models/ProductInput.php:68
+#: src/Models/ProductInput.php:69
 msgid "A posição é obrigatória!"
 msgstr "A posição é obrigatória!"
 
-#: src/Models/ProductInput.php:71
+#: src/Models/ProductInput.php:72
 msgid "A altura é obrigatória!"
 msgstr "A altura é obrigatória!"
 
-#: src/Models/ProductInput.php:88 src/Models/ProductInput.php:92
+#: src/Models/ProductInput.php:89 src/Models/ProductInput.php:93
 #: src/Models/Reformation.php:64
 #, php-format
 msgid "O novo número que você determinou removerá mais do que está no estoque!"
 msgstr ""
 "O novo número que você determinou removerá mais do que está no estoque!"
 
-#: src/Models/ProductInput.php:129
+#: src/Models/ProductInput.php:130
 #, php-format
 msgid "A quantidade de caixas à ser removida é maior do que está no estoque!"
 msgstr "A quantidade de caixas à ser removida é maior do que está no estoque!"
 
-#: src/Models/ProductInput.php:134
+#: src/Models/ProductInput.php:135
 #, php-format
 msgid "A quantidade de unidades à ser removida é maior do que está no estoque!"
 msgstr ""
 "A quantidade de unidades à ser removida é maior do que está no estoque!"
 
-#: src/Models/ProductInput.php:183
+#: src/Models/ProductInput.php:184
 msgid "Recebido"
 msgstr "Recebido"
 
-#: src/Models/ProductInput.php:184
+#: src/Models/ProductInput.php:185
 msgid "Pedido Feito"
 msgstr "Pedido Feito"
 
-#: src/Models/ProductInput.php:185
+#: src/Models/ProductInput.php:186
 msgid "Aguardando"
 msgstr "Aguardando"
 
-#: src/Models/ProductOutput.php:48
+#: src/Models/ProductOutput.php:49
 msgid "O colaborador é obrigatório!"
 msgstr "O colaborador é obrigatório!"
 
-#: src/Models/ProductOutput.php:70 src/Models/ProductOutput.php:74
-#: src/Models/ProductOutput.php:77 src/Models/ProductOutput.php:78
+#: src/Models/ProductOutput.php:71 src/Models/ProductOutput.php:75
+#: src/Models/ProductOutput.php:78 src/Models/ProductOutput.php:79
 #: src/Models/Reformation.php:69 src/Models/Reformation.php:73
 #, php-format
 msgid "O número que você determinou ultrapassa o que está no estoque!"
@@ -1896,7 +1896,7 @@ msgstr "As quantidades do %sº turno precisam ser informadas!"
 msgid "A quantidade consertada é maior do que está no estoque!"
 msgstr "A quantidade consertada é maior do que está no estoque!"
 
-#: src/Models/ReformationStock.php:37
+#: src/Models/ReformationStock.php:38
 msgid "A quantidade é obrigatória!"
 msgstr "A quantidade é obrigatória!"
 
@@ -1914,19 +1914,19 @@ msgstr "A confirmação de senha é obrigatória!"
 msgid "As senhas não correspondem!"
 msgstr "As senhas não correspondem!"
 
-#: src/Models/SocialUser.php:39
+#: src/Models/SocialUser.php:40
 msgid "O ID da rede social é obrigatório!"
 msgstr "O ID da rede social é obrigatório!"
 
-#: src/Models/SocialUser.php:42
+#: src/Models/SocialUser.php:43
 msgid "O nome da rede social é obrigatório!"
 msgstr "O nome da rede social é obrigatório!"
 
-#: src/Models/SocialUser.php:52
+#: src/Models/SocialUser.php:53
 msgid "O nome da rede social é inválido!"
 msgstr "O nome da rede social é inválido!"
 
-#: src/Models/SocialUser.php:57 src/Models/User.php:80
+#: src/Models/SocialUser.php:58 src/Models/User.php:80
 #: src/Models/UserForm.php:50
 msgid "O email informado já está em uso! Tente outro."
 msgstr "O email informado já está em uso! Tente outro."
@@ -1983,25 +1983,25 @@ msgid ""
 msgstr ""
 "A data da última alteração de senha deve seguir o padrão dd/mm/aaaa hh:mm:ss!"
 
-#: src/Models/UserType.php:34
+#: src/Models/UserType.php:35
 msgid "O nome no singular é obrigatório!"
 msgstr "O nome no singular é obrigatório!"
 
-#: src/Models/UserType.php:35
+#: src/Models/UserType.php:36
 #, php-format
 msgid "O nome no singular deve conter no máximo %s caractéres!"
 msgstr "O nome no singular deve conter no máximo %s caractéres!"
 
-#: src/Models/UserType.php:38
+#: src/Models/UserType.php:39
 msgid "O nome no plural é obrigatório!"
 msgstr "O nome no plural é obrigatório!"
 
-#: src/Models/UserType.php:39
+#: src/Models/UserType.php:40
 #, php-format
 msgid "O nome no plural deve conter no máximo %s caractéres!"
 msgstr "O nome no plural deve conter no máximo %s caractéres!"
 
-#: src/Models/UserType.php:58
+#: src/Models/UserType.php:67
 msgid "Você não pode excluir um tipo de usuário vinculado à um usuário!"
 msgstr "Você não pode excluir um tipo de usuário vinculado à um usuário!"
 

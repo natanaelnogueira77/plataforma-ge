@@ -128,7 +128,7 @@ class ProductInputsController extends TemplateController
                     'position' => $productInput->position ?? '---',
                     'height' => $productInput->height ?? '---',
                     'c_status' => "<div class=\"badge badge-{$stColor[$productInput->c_status]}\">{$productInput->getStatus()}</div>",
-                    'created_at' => $this->getDateTime($productInput->created_at)->format('d/m/Y'),
+                    'created_at' => $productInput->getCreatedAtDateTime()->format('d/m/Y'),
                     'actions' => "
                         <div class=\"dropup d-inline-block\">
                             <button type=\"button\" aria-haspopup=\"true\" aria-expanded=\"false\" 
@@ -233,8 +233,8 @@ class ProductInputsController extends TemplateController
                     _('Posição') => $productInput->position ?? '---',
                     _('Altura') => $productInput->height ?? '---',
                     _('Status') => $productInput->getStatus(),
-                    _('Data de entrada') => $this->getDateTime($productInput->created_at)->format('d/m/Y'),
-                    _('Hora de entrada') => $this->getDateTime($productInput->created_at)->format('H:i')
+                    _('Data de entrada') => $productInput->getCreatedAtDateTime()->format('d/m/Y'),
+                    _('Hora de entrada') => $productInput->getCreatedAtDateTime()->format('H:i')
                 ];
             }
         }

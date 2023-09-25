@@ -140,4 +140,14 @@ class Reformation extends DBModel
     {
         return $this->amount_start - $this->amount_end;
     }
+
+    public function getCreatedAtDateTime(): DateTime 
+    {
+        return new DateTime($this->created_at);
+    }
+
+    public function getUpdatedAtDateTime(): DateTime 
+    {
+        return new DateTime($this->updated_at);
+    }
 }

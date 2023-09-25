@@ -2,6 +2,7 @@
 
 namespace Src\Models;
 
+use DateTime;
 use GTG\MVC\DB\DBModel;
 use Src\Models\Product;
 
@@ -66,5 +67,15 @@ class ReformationStock extends DBModel
     public static function getByProductId(int $productId, string $columns = '*'): ?self 
     {
         return (new self())->get(['pro_id' => $productId], $columns)->fetch(false);
+    }
+
+    public function getCreatedAtDateTime(): DateTime 
+    {
+        return new DateTime($this->created_at);
+    }
+
+    public function getUpdatedAtDateTime(): DateTime 
+    {
+        return new DateTime($this->updated_at);
     }
 }

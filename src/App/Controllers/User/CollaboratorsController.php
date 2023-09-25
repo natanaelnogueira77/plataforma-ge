@@ -88,7 +88,7 @@ class CollaboratorsController extends TemplateController
                 $content[] = [
                     'id' => '#' . $collaborator->id,
                     'name' => $collaborator->name,
-                    'created_at' => $this->getDateTime($collaborator->created_at)->format('d/m/Y'),
+                    'created_at' => $collaborator->getCreatedAtDateTime()->format('d/m/Y'),
                     'actions' => "
                         <div class=\"dropup d-inline-block\">
                             <button type=\"button\" aria-haspopup=\"true\" aria-expanded=\"false\" 
