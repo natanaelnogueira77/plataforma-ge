@@ -86,7 +86,7 @@ class StocksController extends TemplateController
 
         $this->APIResponse([
             'content' => [
-                'table' => $this->getView('components/data-table', [
+                'table' => $this->getView('_components/data-table', [
                     'headers' => [
                         'id' => ['text' => _('ID'), 'sort' => true],
                         'pro_id' => ['text' => _('Descrição'), 'sort' => true],
@@ -105,7 +105,7 @@ class StocksController extends TemplateController
                     ],
                     'data' => $content
                 ]),
-                'pagination' => $this->getView('components/pagination', [
+                'pagination' => $this->getView('_components/pagination', [
                     'pages' => $pages,
                     'currPage' => $page,
                     'results' => $count,
@@ -129,7 +129,7 @@ class StocksController extends TemplateController
             $filters["{$tnStock}.pro_id"] = $data['product_id'];
         }
 
-        $filters["t1.c_status"] = 1;
+        $filters["t1.c_status"] = ProductInput::CS_RECEIVED;
         $filters['raw'] = "t1.updated_at = (SELECT MAX(t2.updated_at) FROM {$tnProductInput} t2 where t2.pro_id = t1.pro_id)";
 
         $stocks = (new Stock())->join("{$tnProductInput} t1", [

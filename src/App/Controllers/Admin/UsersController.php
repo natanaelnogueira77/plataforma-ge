@@ -7,7 +7,6 @@ use Src\App\Controllers\Admin\TemplateController;
 use Src\Models\Config;
 use Src\Models\User;
 use Src\Models\UserForm;
-use Src\Models\UserMeta;
 use Src\Models\UserType;
 use Src\Utils\ErrorMessages;
 
@@ -112,7 +111,7 @@ class UsersController extends TemplateController
         }
 
         $dbUser->loadData([
-            'utip_id' => $data['utip_id'],
+            'utip_id' => intval($data['utip_id']),
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => $data['update_password'] ? $data['password'] : $dbUser->password,
@@ -209,7 +208,7 @@ class UsersController extends TemplateController
 
         $this->APIResponse([
             'content' => [
-                'table' => $this->getView('components/data-table', [
+                'table' => $this->getView('_components/data-table', [
                     'headers' => [
                         'actions' => ['text' => _('Ações')],
                         'id' => ['text' => _('ID'), 'sort' => true],
@@ -223,7 +222,7 @@ class UsersController extends TemplateController
                     ],
                     'data' => $content
                 ]),
-                'pagination' => $this->getView('components/pagination', [
+                'pagination' => $this->getView('_components/pagination', [
                     'pages' => $pages,
                     'currPage' => $page,
                     'results' => $count,

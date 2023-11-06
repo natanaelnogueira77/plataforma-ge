@@ -40,7 +40,8 @@ class ProductsController extends TemplateController
         }
 
         $this->setMessage(
-            'success', sprintf(_('O produto "%s" foi cadastrado com sucesso!'), $dbProduct->desc_short)
+            'success', 
+            sprintf(_('O produto "%s" foi cadastrado com sucesso!'), $dbProduct->desc_short)
         )->APIResponse([], 200);
     }
 
@@ -55,7 +56,8 @@ class ProductsController extends TemplateController
         }
 
         $this->setMessage(
-            'success', sprintf(_('Os dados do produto "%s" foram alterados com sucesso!'), $dbProduct->desc_short)
+            'success', 
+            sprintf(_('Os dados do produto "%s" foram alterados com sucesso!'), $dbProduct->desc_short)
         )->APIResponse([], 200);
     }
 
@@ -117,7 +119,7 @@ class ProductsController extends TemplateController
 
         $this->APIResponse([
             'content' => [
-                'table' => $this->getView('components/data-table', [
+                'table' => $this->getView('_components/data-table', [
                     'headers' => [
                         'actions' => ['text' => _('Ações')],
                         'id' => ['text' => _('ID'), 'sort' => true],
@@ -130,7 +132,7 @@ class ProductsController extends TemplateController
                     ],
                     'data' => $content
                 ]),
-                'pagination' => $this->getView('components/pagination', [
+                'pagination' => $this->getView('_components/pagination', [
                     'pages' => $pages,
                     'currPage' => $page,
                     'results' => $count,
@@ -150,8 +152,10 @@ class ProductsController extends TemplateController
             return;
         }
 
-        $this->setMessage('success', sprintf(_('O produto "%s" foi excluído com sucesso.'), $dbProduct->desc_short))
-            ->APIResponse([], 200);
+        $this->setMessage(
+            'success', 
+            sprintf(_('O produto "%s" foi excluído com sucesso.'), $dbProduct->desc_short)
+        )->APIResponse([], 200);
     }
 
     public function export(array $data): void 

@@ -1,11 +1,8 @@
 <?php 
-    $this->layout("themes/architect-ui/_theme", [
-        'title' => sprintf(_('Resumo Operacional | %s'), $appData['app_name'])
-    ]);
-?>
-
-<?php 
-    $this->insert('themes/architect-ui/components/title', [
+    $theme->title = sprintf(_('Resumo Operacional | %s'), $appData['app_name']);
+    $this->layout("themes/architect-ui/_theme", ['theme' => $theme]);
+    
+    $this->insert('themes/architect-ui/_components/title', [
         'title' => _('Resumo Operacional'),
         'subtitle' => _('Segue abaixo o resumo operacional'),
         'icon' => 'pe-7s-note2',
@@ -25,11 +22,3 @@
         <div class="alert alert-info"><?= _('Estamos preparando...') ?></div>
     </div>
 </div>
-
-<?php $this->start('scripts'); ?>
-<script>
-    $(function () {
-        const app = new App();
-    });
-</script>
-<?php $this->end(); ?>

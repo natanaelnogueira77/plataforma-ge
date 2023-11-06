@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.0.2] - 2023-12-31
 ### Added 
+- GTG PHP MVC Framework v1.0.11.
 - Pieces control implementation.
 - Reformation control implementation.
 - Productivity control implementation. 

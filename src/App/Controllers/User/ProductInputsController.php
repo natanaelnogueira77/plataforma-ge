@@ -46,7 +46,11 @@ class ProductInputsController extends TemplateController
         }
 
         $this->setMessage(
-            'success', sprintf(_('A entrada do produto "%s" foi realizada com sucesso!'), $dbProductInput->product()->desc_short)
+            'success', 
+            sprintf(
+                _('A entrada do produto "%s" foi realizada com sucesso!'), 
+                $dbProductInput->product()->desc_short
+            )
         )->APIResponse([], 200);
     }
 
@@ -73,7 +77,10 @@ class ProductInputsController extends TemplateController
 
         $this->setMessage(
             'success', 
-            sprintf(_('Os dados da entrada do produto "%s" foram alterados com sucesso!'), $dbProductInput->product()->desc_short)
+            sprintf(
+                _('Os dados da entrada do produto "%s" foram alterados com sucesso!'), 
+                $dbProductInput->product()->desc_short
+            )
         )->APIResponse([], 200);
     }
 
@@ -112,11 +119,6 @@ class ProductInputsController extends TemplateController
         
         if($objects = $productInputs->fetch(true)) {
             $objects = ProductInput::withProduct($objects);
-            $stColor = [
-                ProductInput::CS_RECEIVED => 'success',
-                ProductInput::CS_ORDERED => 'primary',
-                ProductInput::CS_AWAITING => 'warning'
-            ];
             foreach($objects as $productInput) {
                 $params = ['product_input_id' => $productInput->id];
                 $content[] = [
@@ -127,7 +129,7 @@ class ProductInputsController extends TemplateController
                     'street' => $productInput->street ?? '---',
                     'position' => $productInput->position ?? '---',
                     'height' => $productInput->height ?? '---',
-                    'c_status' => "<div class=\"badge badge-{$stColor[$productInput->c_status]}\">{$productInput->getStatus()}</div>",
+                    'c_status' => "<div class=\"badge badge-{$productInput->getStatusColor()}\">{$productInput->getStatus()}</div>",
                     'created_at' => $productInput->getCreatedAtDateTime()->format('d/m/Y'),
                     'actions' => "
                         <div class=\"dropup d-inline-block\">
@@ -157,7 +159,7 @@ class ProductInputsController extends TemplateController
 
         $this->APIResponse([
             'content' => [
-                'table' => $this->getView('components/data-table', [
+                'table' => $this->getView('_components/data-table', [
                     'headers' => [
                         'actions' => ['text' => _('Ações')],
                         'id' => ['text' => _('ID'), 'sort' => true],
@@ -176,7 +178,7 @@ class ProductInputsController extends TemplateController
                     ],
                     'data' => $content
                 ]),
-                'pagination' => $this->getView('components/pagination', [
+                'pagination' => $this->getView('_components/pagination', [
                     'pages' => $pages,
                     'currPage' => $page,
                     'results' => $count,

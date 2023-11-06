@@ -128,7 +128,7 @@ class ReformedsManagementController extends TemplateController
 
         $this->APIResponse([
             'content' => [
-                'table' => $this->getView('components/data-table', [
+                'table' => $this->getView('_components/data-table', [
                     'headers' => [
                         'r_date' => ['text' => _('Data'), 'sort' => true],
                         'pro_id' => ['text' => _('Produto'), 'sort' => true],
@@ -148,7 +148,7 @@ class ReformedsManagementController extends TemplateController
                     ],
                     'data' => $content
                 ]),
-                'pagination' => $this->getView('components/pagination', [
+                'pagination' => $this->getView('_components/pagination', [
                     'pages' => $pages,
                     'currPage' => $page,
                     'results' => $count,

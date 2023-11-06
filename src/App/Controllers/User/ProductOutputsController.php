@@ -46,7 +46,10 @@ class ProductOutputsController extends TemplateController
         }
 
         $this->setMessage(
-            'success', sprintf(_('A saída do produto "%s" foi realizada com sucesso!'), $dbProductOutput->product()->desc_short)
+            'success', sprintf(
+                _('A saída do produto "%s" foi realizada com sucesso!'), 
+                $dbProductOutput->product()->desc_short
+            )
         )->APIResponse([], 200);
     }
 
@@ -68,7 +71,11 @@ class ProductOutputsController extends TemplateController
         }
 
         $this->setMessage(
-            'success', sprintf(_('Os dados da saída do produto "%s" foram alterados com sucesso!'), $dbProductOutput->product()->desc_short)
+            'success', 
+            sprintf(
+                _('Os dados da saída do produto "%s" foram alterados com sucesso!'), 
+                $dbProductOutput->product()->desc_short
+            )
         )->APIResponse([], 200);
     }
 
@@ -143,7 +150,7 @@ class ProductOutputsController extends TemplateController
 
         $this->APIResponse([
             'content' => [
-                'table' => $this->getView('components/data-table', [
+                'table' => $this->getView('_components/data-table', [
                     'headers' => [
                         'actions' => ['text' => _('Ações')],
                         'id' => ['text' => _('ID'), 'sort' => true],
@@ -159,7 +166,7 @@ class ProductOutputsController extends TemplateController
                     ],
                     'data' => $content
                 ]),
-                'pagination' => $this->getView('components/pagination', [
+                'pagination' => $this->getView('_components/pagination', [
                     'pages' => $pages,
                     'currPage' => $page,
                     'results' => $count,
@@ -180,7 +187,11 @@ class ProductOutputsController extends TemplateController
         }
 
         $this->setMessage(
-            'success', sprintf(_('A saída do produto "%s" foi excluído com sucesso.'), $dbProductOutput->product()->desc_short)
+            'success', 
+            sprintf(
+                _('A saída do produto "%s" foi excluído com sucesso.'), 
+                $dbProductOutput->product()->desc_short
+            )
         )->APIResponse([], 200);
     }
 

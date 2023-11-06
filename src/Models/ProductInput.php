@@ -192,6 +192,20 @@ class ProductInput extends DBModel
         return isset(self::getStates()[$this->c_status]) ? self::getStates()[$this->c_status] : null;
     }
 
+    public static function getStatesColors(): array 
+    {
+        return [
+            self::CS_RECEIVED => 'success',
+            self::CS_ORDERED => 'primary',
+            self::CS_AWAITING => 'warning'
+        ];
+    }
+
+    public function getStatusColor(): ?string 
+    {
+        return isset(self::getStatesColors()[$this->c_status]) ? self::getStatesColors()[$this->c_status] : null;
+    }
+
     public function getCreatedAtDateTime(): DateTime 
     {
         return new DateTime($this->created_at);

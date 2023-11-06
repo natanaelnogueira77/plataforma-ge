@@ -40,11 +40,6 @@ class ReformationStock extends DBModel
         ];
     }
 
-    public function destroy(): bool 
-    {
-        return parent::destroy();
-    }
-
     public function product(string $columns = '*'): ?Product 
     {
         $this->product = $this->belongsTo(Product::class, 'pro_id', 'id', $columns)->fetch(false);

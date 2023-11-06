@@ -1,11 +1,8 @@
 <?php 
-    $this->layout("themes/architect-ui/_theme", [
-        'title' => sprintf(_('Controle de Estoque de Insumos | %s'), $appData['app_name'])
-    ]);
-?>
+    $theme->title = sprintf(_('Controle de Estoque de Insumos | %s'), $appData['app_name']);
+    $this->layout("themes/architect-ui/_theme", ['theme' => $theme]);
 
-<?php 
-    $this->insert('themes/architect-ui/components/title', [
+    $this->insert('themes/architect-ui/_components/title', [
         'title' => _('Controle de Estoque de Insumos'),
         'subtitle' => _('Segue abaixo a lista de estoques de produtos do sistema'),
         'icon' => 'pe-7s-server',
@@ -33,7 +30,7 @@
 
     <div class="card-body">
         <form id="filters">
-            <?php $this->insert('components/data-table-filters', ['formId' => 'filters']); ?>
+            <?php $this->insert('_components/data-table-filters', ['formId' => 'filters']); ?>
         </form>
 
         <div id="stocks" data-action="<?= $router->route('user.stocks.list') ?>">
@@ -46,35 +43,13 @@
     </div>
 </div>
 
-<?php $this->start('scripts'); ?>
-<script>
-    $(function () {
-        const app = new App();
-        const table = $("#stocks");
-        const filters_form = $("#filters");
-
-        const export_excel_btn = $("#export-excel");
-        const export_stocks_form = $("#export-stocks");
-        const export_stocks_modal = $("#export-stocks-modal");
-
-        const dataTable = app.table(table, table.data('action'));
-        dataTable.defaultParams(app.objectifyForm(filters_form)).filtersForm(filters_form)
-        .setMsgFunc((msg) => app.showMessage(msg.message, msg.type)).loadOnChange().load();
-
-        export_excel_btn.click(function () {
-            var data = $(this).data();
-
-            export_stocks_form.attr('action', data.action);
-            export_stocks_form.attr('method', data.method);
-            export_stocks_modal.modal('show');
-        });
-    });
-</script>
-<?php $this->end(); ?>
-
 <?php 
+    $this->start('scripts'); 
+    $this->insert('user/stocks/_sripts/index.js');
+    $this->end(); 
+
     $this->start('modals');
-    $this->insert('user/stocks/components/export-modal', [
+    $this->insert('user/stocks/_components/export-modal', [
         'dbProducts' => $dbProducts, 
         'dbCollaborators' => $dbCollaborators
     ]);
