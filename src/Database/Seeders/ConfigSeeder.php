@@ -23,7 +23,7 @@ class ConfigSeeder extends Seeder
                 'value' => 'public/storage/users/user1/logo.png'
             ],
             [
-                'meta' => Config::KEY_LOGO_IMG, 
+                'meta' => Config::KEY_LOGIN_IMG, 
                 'value' => 'public/storage/users/user1/login-img.jpeg'
             ]
         ]);
